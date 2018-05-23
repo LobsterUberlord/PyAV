@@ -5,6 +5,8 @@ include "libavutil/error.pxd"
 include "libavutil/frame.pxd"
 include "libavutil/samplefmt.pxd"
 include "libavutil/motion_vector.pxd"
+include "libavutil/buffer.pxd"
+include "libavutil/hwcontext.pxd"
 
 include "libavcodec/avcodec.pxd"
 include "libavcodec/bsf.pxd"

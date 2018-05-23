@@ -33,6 +33,8 @@ cdef class Container:
     cdef readonly dict container_options
     cdef readonly list stream_options
 
+    cdef dict hwaccel
+
     cdef readonly StreamContainer streams
     cdef readonly dict metadata
 
