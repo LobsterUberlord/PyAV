@@ -121,7 +121,7 @@ cdef class OutputContainer(Container):
         err_check(lib.avcodec_parameters_from_context(stream.codecpar, codec_context))
 
         # Construct the user-land stream
-        cdef CodecContext py_codec_context = wrap_codec_context(codec_context, codec)
+        cdef CodecContext py_codec_context = wrap_codec_context(codec_context, codec, self.hwaccel)
         cdef Stream py_stream = wrap_stream(self, stream, py_codec_context)
         self.streams.add_stream(py_stream)
 

@@ -27,7 +27,8 @@ if [[ -e /usr/local/cuda ]]; then
     # Get Nvidia headers for ffmpeg
     cd $PYAV_LIBRARY_ROOT
     if [[ ! -e "$PYAV_LIBRARY_ROOT/nv-codec-headers" ]]; then
-        git clone https://github.com/FFmpeg/nv-codec-headers.git
+        # NOTE: grab the 12.0 branch, there are some breaking API changes in 12.2
+        git clone -b sdk/12.0 https://github.com/FFmpeg/nv-codec-headers.git
         cd nv-codec-headers
         make -j4
         make PREFIX="$PYAV_LIBRARY_PREFIX" install
