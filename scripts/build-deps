@@ -72,6 +72,8 @@ echo ./configure
     --enable-gpl \
     --enable-libx264 \
     --enable-libxml2 \
+    --enable-libopus \
+    --enable-libmp3lame \
     --enable-shared \
     $CONFFLAGS_NVIDIA \
     --prefix="$PYAV_LIBRARY_PREFIX" \
