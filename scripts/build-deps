@@ -20,6 +20,33 @@ fi
 
 mkdir -p "$PYAV_LIBRARY_ROOT"
 mkdir -p "$PYAV_LIBRARY_PREFIX"
+
+# Nvidia build
+CONFFLAGS_NVIDIA=""
+if [[ -e /usr/local/cuda ]]; then
+    # Get Nvidia headers for ffmpeg
+    cd $PYAV_LIBRARY_ROOT
+    if [[ ! -e "$PYAV_LIBRARY_ROOT/nv-codec-headers" ]]; then
+        # NOTE: grab the 12.0 branch, there are some breaking API changes in 12.2
+        git clone -b sdk/12.0 https://github.com/FFmpeg/nv-codec-headers.git
+        cd nv-codec-headers
+        make -j4
+        make PREFIX="$PYAV_LIBRARY_PREFIX" install
+    fi
+
+    PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+    CONFFLAGS_NVIDIA="--enable-cuda \
+                      --enable-cuvid \
+                      --enable-nvenc \
+                      --enable-nonfree \
+                      --enable-libnpp \
+                      --extra-cflags=-I/usr/local/cuda/include \
+                      --extra-ldflags=-L/usr/local/cuda/lib64"
+else
+    echo "WARNING: Did not find cuda libraries in /usr/local/cuda..."
+    echo "         Building without hardware acceleration support"
+fi
+
 cd "$PYAV_LIBRARY_ROOT"
 
 
@@ -45,7 +72,10 @@ echo ./configure
     --enable-gpl \
     --enable-libx264 \
     --enable-libxml2 \
+    --enable-libopus \
+    --enable-libmp3lame \
     --enable-shared \
+    $CONFFLAGS_NVIDIA \
     --prefix="$PYAV_LIBRARY_PREFIX" \
     || exit 2
 echo

@@ -169,7 +169,7 @@ cdef class Container:
                   container_options, stream_options,
                   metadata_encoding, metadata_errors,
                   buffer_size, open_timeout, read_timeout,
-                  io_open):
+                  io_open, hwaccel):
 
         if sentinel is not _cinit_sentinel:
             raise RuntimeError("cannot construct base Container")
@@ -195,6 +195,8 @@ cdef class Container:
 
         self.buffer_size = buffer_size
         self.io_open = io_open
+
+        self.hwaccel = hwaccel
 
         if format_name is not None:
             self.format = ContainerFormat(format_name)
@@ -347,6 +349,7 @@ def open(
     buffer_size=32768,
     timeout=None,
     io_open=None,
+    hwaccel=None,
 ):
     """open(file, mode='r', **kwargs)
 
@@ -373,6 +376,8 @@ def open(
         ``url`` is the url to open, ``flags`` is a combination of AVIO_FLAG_* and
         ``options`` is a dictionary of additional options. The callable should return a
         file-like object.
+    :param dict hwaccel: The desired device parameters to use for hardware acceleration
+        including device_type_name (e.x. cuda) and optional device (e.x. '/dev/dri/renderD128').
     :rtype: Container
 
     For devices (via ``libavdevice``), pass the name of the device to ``format``,
@@ -416,10 +421,13 @@ def open(
         open_timeout = timeout
         read_timeout = timeout
 
+    if hwaccel is not None:
+        hwaccel = dict(hwaccel)
+
     if mode.startswith("r"):
         return InputContainer(_cinit_sentinel, file, format, options,
             container_options, stream_options, metadata_encoding, metadata_errors,
-            buffer_size, open_timeout, read_timeout, io_open,
+            buffer_size, open_timeout, read_timeout, io_open, hwaccel,
         )
 
     if stream_options:
@@ -428,5 +436,6 @@ def open(
         )
     return OutputContainer(_cinit_sentinel, file, format, options,
         container_options, stream_options, metadata_encoding, metadata_errors,
-        buffer_size, open_timeout, read_timeout, io_open,
+        buffer_size, open_timeout, read_timeout,
+        io_open, hwaccel,
     )

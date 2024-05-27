@@ -70,6 +70,7 @@ def open(
     buffer_size: int = 32768,
     timeout: Real | None | tuple[Real | None, Real | None] = None,
     io_open: Callable[..., Any] | None = None,
+    hwaccel: dict | None = None,
 ) -> InputContainer: ...
 @overload
 def open(
@@ -84,6 +85,7 @@ def open(
     buffer_size: int = 32768,
     timeout: Real | None | tuple[Real | None, Real | None] = None,
     io_open: Callable[..., Any] | None = None,
+    hwaccel: dict | None = None,
 ) -> InputContainer: ...
 @overload
 def open(
@@ -98,6 +100,7 @@ def open(
     buffer_size: int = 32768,
     timeout: Real | None | tuple[Real | None, Real | None] = None,
     io_open: Callable[..., Any] | None = None,
+    hwaccel: dict | None = None,
 ) -> OutputContainer: ...
 @overload
 def open(
@@ -112,4 +115,5 @@ def open(
     buffer_size: int = 32768,
     timeout: Real | None | tuple[Real | None, Real | None] = None,
     io_open: Callable[..., Any] | None = None,
+    hwaccel: dict | None = None,
 ) -> InputContainer | OutputContainer: ...
