@@ -138,10 +138,10 @@ Flags2 = define_enum("Flags2", __name__, (
 cdef class CodecContext:
 
     @staticmethod
-    def create(codec, mode=None):
+    def create(codec, mode=None, hwaccel=None):
         cdef Codec cy_codec = codec if isinstance(codec, Codec) else Codec(codec, mode)
         cdef lib.AVCodecContext *c_ctx = lib.avcodec_alloc_context3(cy_codec.ptr)
-        return wrap_codec_context(c_ctx, cy_codec.ptr, None)
+        return wrap_codec_context(c_ctx, cy_codec.ptr, hwaccel)
 
     def __cinit__(self, sentinel=None, *args, **kwargs):
         if sentinel is not _cinit_sentinel:
